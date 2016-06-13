@@ -1,0 +1,1 @@
+This is an ionic hybrid app with Login authentication and Signup facility with product display through the backend

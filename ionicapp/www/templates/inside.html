@@ -1,0 +1,35 @@
+<style type="text/css">
+  .right {
+    position: absolute;
+    right: 0px;
+    top: 18px;
+    padding-right: 10px;
+}
+</style>
+<ion-view>
+  <ion-header-bar align-title="center" class="bar-positive">
+    <h1 class="title">Member area</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="logout()">Logout</button>
+    </div>
+  </ion-header-bar>
+  <ion-content class="padding">
+    <!-- <div class="card">
+      <div class="item item-text-wrap">
+        {{memberinfo}}
+      </div>
+    </div>
+     -->
+     <ion-list>
+    <ion-item ng-repeat="item in items[0]">
+   <p> {{item.name}}</p> <p class="right"> {{item.price}}</p>
+   </ion-item>
+</ion-list>
+    <!-- <button class="button button-full button-assertive" ng-click="destroySession()">
+      Destroy token
+    </button> -->
+    <button class="button button-full button-balanced" ng-disabled = "isDisabled" ng-click="getInfo()">
+      Get Memberinfo
+    </button>
+  </ion-content>
+</ion-view>
