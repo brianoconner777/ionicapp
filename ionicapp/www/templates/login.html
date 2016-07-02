@@ -1,16 +1,45 @@
+<style type="text/css">
+  
+  .padding{
+  background-color: rgb(241,241,241);
+ }
+ .bar .bar-positive{
+  background-color: rgb(115,139,158) !important;
+ }
+
+ .bar.bar-positive {
+    border-color: rgb(115,139,158) !important;
+    background-color:rgb(115,139,158) !important;
+    /* background-image: linear-gradient(0deg, #0c60ee, #0c60ee 50%, transparent 50%); */
+    color: #fff;
+}
+.button-new{
+    background-color:rgb(115,139,158);
+    color : white;
+  }
+</style>
 <ion-view title="Please sign in">
   <ion-content class="padding">
-    <div class="list">
-      <label class="item item-input">
-        <input type="text" placeholder="Name" ng-model="user.name">
-      </label>
-      <label class="item item-input">
-        <input type="password" placeholder="Password" ng-model="user.password">
-      </label>
-    </div>
-    <button class="button button-full button-balanced" ng-click="login()">
-      Login
-    </button>
-    <button class="button button-positive button-clear button-full" ui-sref="outside.register">Register now!</button>
+    <div class="list list-inset">
+  <label class="item item-input">
+    <i class="icon ion-search placeholder-icon"></i>
+    <input type="text" ng-model ="searchString" placeholder="Search">
+  </label>
+</div>
+<ion-radio ng-repeat="i in items | searchFor:searchString" ng-value="'i.id'">{{i.title}}</ion-radio>
+
+
+<!-- <h3 class="headName">Ajax Live search using AngularJs</h3>
+      <div class="bar">
+        <input type="text" class="search" ng-model="searchString" placeholder="Enter your search terms" />
+      </div>
+      <ul class="data-ctrl">
+        <li ng-repeat="i in items | searchFor:searchString">
+          <p>{{i.title}}</p>
+        </li>
+      </ul> -->
+      <button class="button button-full button-new">
+  Next
+</button>
   </ion-content>
 </ion-view>

@@ -1,15 +1,63 @@
+<style type="text/css">
+  .padding{
+  background-color: rgb(241,241,241);
+ }
+ .bar .bar-positive{
+  background-color: rgb(115,139,158) !important;
+ }
+
+ .bar.bar-positive {
+    border-color: rgb(115,139,158) !important;
+    background-color:rgb(115,139,158) !important;
+    /* background-image: linear-gradient(0deg, #0c60ee, #0c60ee 50%, transparent 50%); */
+    color: #fff;
+}
+  .button-new{
+    background-color:rgb(115,139,158);
+    color : white;
+  }
+ .item{
+  border-width: 0px;
+ }
+input[type="text"]{
+  background-color: white !important;
+  border-radius: 10px;
+  text-align: center;
+}
+</style>
+
+
+
+
+
+
 <ion-view title="Create a new account">
   <ion-content class="padding">
-    <div class="list">
-      <label class="item item-input">
-        <input type="text" placeholder="Name" ng-model="user.name">
-      </label>
-      <label class="item item-input">
-        <input type="password" placeholder="Password" ng-model="user.password">
-      </label>
-    </div>
-    <button class="button button-full button-positive" ng-click="signup()">
-      Sign up
-    </button>
+    
+    <div class="list"><br><br>
+  <label class="item item-input item-floating-label">
+    <span class="input-label">Full Name</span>
+    <input type="text" placeholder="Full Name" ng-model="user.fullname">
+  </label><br><br><br>
+  <label class="item item-input item-floating-label">
+    <span class="input-label">Mobile Number</span>
+    <input type="text" ng-minlength="8" ng-pattern="/^[0-9]{1,11}$/" placeholder="Mobile Number" ng-model="user.mobilenumber">
+  </label><br><br><br>
+  <label class="item item-input item-floating-label">
+    <span class="input-label">Aadhar Number</span>
+    <input type="text" ng-minlength="12" ng-maxlength="12" placeholder="Aadhar Number" ng-model="user.anum">
+  </label><br><br><br><br>
+  <a ng-click="openDatePicker();consoled();">
+  <label class="item item-input item-floating-label" >
+    <span class="input-label" ng-bind="datetext">{{datetext}}</span>
+    <input type="text" placeholder="Date of Birth">
+  </label><br><br><br><br>
+  </a>
+  
+<button class="button button-full button-new" ng-click="savedata();dated();signup()" ng-disabled="isDisabled">
+  Next
+</button>
+</div>
+    
   </ion-content>
 </ion-view>

@@ -1,4 +1,4 @@
-angular.module('starter', ['ionic'])
+angular.module('starter', ['ionic','ionic-datepicker','ngStorage'])
 
 .config(function($stateProvider, $urlRouterProvider) {
 
@@ -7,11 +7,6 @@ angular.module('starter', ['ionic'])
     url: '/outside',
     abstract: true,
     templateUrl: 'templates/outside.html'
-  })
-  .state('outside.login', {
-    url: '/login',
-    templateUrl: 'templates/login.html',
-    controller: 'LoginCtrl'
   })
   .state('outside.register', {
     url: '/register',
@@ -22,19 +17,20 @@ angular.module('starter', ['ionic'])
     url: '/inside',
     templateUrl: 'templates/inside.html',
     controller: 'InsideCtrl'
+  })
+  .state('login', {
+    url: '/login',
+    templateUrl: 'templates/login.html',
+    controller: 'LoginCtrl'
   });
 
-  $urlRouterProvider.otherwise('/outside/login');
+  $urlRouterProvider.otherwise('/outside/register');
 })
 
 .run(function ($rootScope, $state, AuthService, AUTH_EVENTS) {
   $rootScope.$on('$stateChangeStart', function (event,next, nextParams, fromState) {
     if (!AuthService.isAuthenticated()) {
       console.log(next.name);
-      if (next.name !== 'outside.login' && next.name !== 'outside.register') {
-        event.preventDefault();
-        $state.go('outside.login');
-      }
     }
   });
 });

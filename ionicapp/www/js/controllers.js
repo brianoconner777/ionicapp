@@ -1,70 +1,85 @@
 angular.module('starter')
 
-.controller('LoginCtrl', function($scope, AuthService, $ionicPopup, $state) {
-  $scope.user = {
-    name: '',
-    password: ''
-  };
+.controller('LoginCtrl', function($scope, AuthService, $ionicPopup,$http,$state) {
+      $http.get('data.json').success(function(data, status, headers, config) {
+    $scope.items = data.data;
+  }).error(function(data, status, headers, config) {
+    console.log("No data found..");
+  });
 
-  $scope.login = function() {
-    AuthService.login($scope.user).then(function(msg) {
-      $state.go('inside');
-    }, function(errMsg) {
-      var alertPopup = $ionicPopup.alert({
-        title: 'Login failed!',
-        template: errMsg
-      });
-    });
-  };
+
+ 
 })
 
-.controller('RegisterCtrl', function($scope, AuthService, $ionicPopup, $state) {
-  $scope.user = {
-    name: '',
-    password: ''
-  };
-
-  $scope.signup = function() {
-    AuthService.register($scope.user).then(function(msg) {
-      $state.go('outside.login');
-      var alertPopup = $ionicPopup.alert({
-        title: 'Register success!',
-        template: msg
-      });
-    }, function(errMsg) {
-      var alertPopup = $ionicPopup.alert({
-        title: 'Register Status!',
-        template: errMsg
-      });
-    });
-  };
-})
-
-.controller('InsideCtrl', function($scope, AuthService, API_ENDPOINT, $http, $state) {
-  $scope.items =[];
-  $scope.isDisabled = false;
-  $scope.destroySession = function() {
-    AuthService.logout();
-  };
-
-  // $scope.getInfo = function() {
-  //   $http.get(API_ENDPOINT.url + '/memberinfo').then(function(result) {
-  //     $scope.memberinfo = result.data.msg;
-  //   });
-  // };
-  
-
-  $scope.logout = function() {
-    AuthService.logout();
-    $state.go('outside.login');
-  };
-  $scope.getInfo = function(){
-    $http.get(API_ENDPOINT.url + '/getproducts').then(function(result){
+.controller('RegisterCtrl', function($scope,$http,ionicDatePicker,$localStorage,$ionicPopup, $state) {
+  $scope.isDisabled=false;
+  $scope.datetext="";
+   var ipObj1 = {
+      callback: function (val) {  //Mandatory
+        console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+        $scope.datetext += new Date(val);
+        console.log($scope.datetext);
+      }};
       
-      $scope.items.push(result.data);
-      $scope.isDisabled = true;
-    });
+
+      $scope.openDatePicker = function(){
+      ionicDatePicker.openDatePicker(ipObj1);
+    };
+  $scope.user = {
+    fullname: "",
+    mobilenumber:"",
+    anum:""   
   };
+  $scope.dated = function(){
+   $scope.user['dob'] = $scope.datetext;
+   console.log($scope.user);
+  }
+  $scope.savedata = function(){
+    $localStorage.mob = $scope.user.mobilenumber;
+  }
+ $scope.signup = function(){
+
+      $http.post("/api/signup",$scope.user).success(function(data,status){
+        if(data.success == "false"){
+          console.log("failed");
+        }
+        $state.go('inside');
+
+      })
+      .error(function(data){
+        console.log(data);
+      })
+
+    
+ } 
+  
+})
+
+.controller('InsideCtrl', function($scope, $localStorage, userData, $http, $state) {
+ 
+  $scope.mobile = $localStorage.mob;
+  $scope.newvalue = function(value){
+    console.log(value);
+    userData.storedata(value);
+  }
+  
+  $scope.MOB = {
+    mobilenumber : $scope.mobile,
+    
+  }
+  
+  $scope.updatedb = function(){
+      $scope.value = userData.returndata();
+      $scope.MOB.preference = $scope.value;
+      console.log($scope.MOB);
+      $http.post("/api/updatepreference",$scope.MOB).success(function (data,status){
+        
+        console.log(data);
+        console.log(status);
+        $state.go('login');
+      });
+    
+  }
 })
 
 .controller('AppCtrl', function($scope, $state, $ionicPopup, AuthService, AUTH_EVENTS) {
@@ -76,4 +91,29 @@ angular.module('starter')
       template: 'Sorry, You have to login again.'
     });
   });
+})
+.filter('searchFor', function(){
+  return function(arr, searchString){
+    if(!searchString){
+      return arr;
+    }
+    var result = [];
+    searchString = searchString.toLowerCase();
+    angular.forEach(arr, function(item){
+      if(item.title.toLowerCase().indexOf(searchString) !== -1){
+      result.push(item);
+    }
+    });
+    return result;
+  };
+})
+.service('userData',function(){
+  var value;
+  this.storedata = function(msg){
+    this.value = msg; 
+  }
+  this.returndata = function(){
+    return this.value;
+  }
 });
+
